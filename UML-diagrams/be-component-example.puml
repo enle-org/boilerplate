@@ -1,0 +1,63 @@
+@startuml "reachHigh API"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+
+Container(spa, "Single-Page App", "Javascript, ReactJS, MobX", "Provides all the platform's functionality to users via their browser")
+
+System_Boundary(c1, "ReachHigh RESTful API") {
+    Container(usersService, "Users Service", "Service: FeathersJS", "Allows users to register and signin to the platform")
+
+    Container(usersHook, "Users Service Hooks", "Hook: FeathersJS", "Provides functionality related to authentication and hashing user passwords")
+
+    Container(usersModel, "Users Model", "Model: Mongoose", "Responsible for creating and reading users data from the underlying MongoDB database")
+
+    Container(goalsService, "Goals Service", "Service: FeathersJS", "Provides functionality related to accessing goals")
+
+    Container(goalsHook, "Goals Service Hooks", "Hook: FeathersJS", "Provides functionality related to authentication")
+
+    Container(goalsModel, "Goals Model", "Model: Mongoose", "Responsible for creating and reading goals data from the underlying MongoDB database")
+
+    Container(tasksService, "Tasks Service", "Service: FeathersJS", "Provides functionality related to accessing tasks")
+
+    Container(tasksHook, "Tasks Service Hooks", "Hook: FeathersJS", "Provides functionality related to authentication")
+
+    Container(tasksModel, "Tasks Model", "Model: Mongoose", "Responsible for creating and reading tasks data from the underlying MongoDB database")
+
+    Container(authHook, "Authentication Hook", "Hook: FeathersJS", "Provides authentication functionality (local strategy)")
+}
+
+SystemDb_Ext(db, "Database")
+System_Ext(monitoring, "Sentry")
+
+Rel(spa, usersService, "Makes API calls to", "Async, JSON/HTTP")
+Rel(spa, goalsService, "Makes API calls to", "Async, JSON/HTTP")
+Rel(spa, tasksService, "Makes API calls to", "Async, JSON/HTTP")
+
+
+Rel(usersService, usersModel, "Uses")
+Rel(usersService, usersHook, "Uses")
+Rel(usersService, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(usersHook, authHook, "Uses")
+Rel(usersModel, db, "Reads from and writes to", "Mongoose")
+
+Rel(goalsService, goalsHook, "Uses")
+Rel(goalsService, goalsModel, "Uses")
+Rel(goalsService, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(goalsHook, authHook, "Uses")
+Rel(goalsModel, db, "Reads from and writes to", "Mongoose")
+
+Rel(tasksService, tasksHook, "Uses")
+Rel(tasksService, tasksModel, "Uses")
+Rel(tasksService, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(tasksHook, authHook, "Uses")
+Rel(tasksModel, db, "Reads from and writes to", "Mongoose")
+
+@enduml

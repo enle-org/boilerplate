@@ -1,0 +1,78 @@
+@startuml "Frontend"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+' LAYOUT_TOP_DOWN
+' LAYOUT_AS_SKETCH
+' LAYOUT_WITH_LEGEND
+
+
+Person(user, "User", "A sales or marketing professional")
+
+System_Boundary(c1, "ReachHigh Frontend") {
+
+    Container(landing, "Landing page", "Page: NextJS", "Allows users to access signup page")
+
+    Container(signup, "Sign Up", "Page: NextJS", "Provides signup interface")
+
+    Container(goals, "Goals page", "Page: NextJS", "Allows users to select goals")
+
+    Container(tasks, "Tasks page", "Page: NextJS", "Allows users to view tasks and mark completed")
+
+    Container(signupComp, "Sign Up Component", "Component: React-MobX", "Provides signup functionality")
+
+    Container(goalsComp, "Goals Component", "Component: React-MobX", "Provides goals selection functionality")
+
+    Container(tasksComp, "Tasks Component", "Component: React-MobX", "Provides tasks viewing and completion functionality")
+
+    Container(authStore, "Auth Store", "Store: MobX", "MobX state store; stores signup input data, makes communication with API")
+
+    Container(uiStore, "UI Store", "Store: MobX", "MobX state store; stores application-wide UI state")
+
+    Container(goalsStore, "Goals Store", "Store: MobX", "MobX state store; stores goal and task data, communicates with API")
+
+    ContainerDb(db, "Web storage", "LocalStorage", "Stores user JSON Web Token (JWT)")
+
+    Container(errorHandler, "Global Error Handler", "Component: React-MobX", "Handles application wide errors")
+
+    Container(errorComp, "Error Modal Component", "Component: React-MobX", "Shows error to user")
+
+}
+
+System_Ext(api, "RESTful API")
+System_Ext(monitoring, "Sentry")
+
+Rel(user, landing, "Uses", "HTTP")
+
+Rel_R(landing, signup, "Routes to")
+
+Rel_R(signup, goals, "Routes to")
+Rel(signup, signupComp, "Uses", "Imports")
+Rel(signupComp, authStore, "Uses", "Observer, MobX actions")
+Rel(signupComp, errorHandler, "Uses")
+
+Rel_R(goals, tasks, "Routes to")
+Rel(goals, goalsComp, "Uses", "Imports")
+Rel(goalsComp, goalsStore, "Uses", "Observer, MobX actions")
+Rel(goalsComp, errorHandler, "Uses")
+
+Rel(tasks, tasksComp, "Uses", "Imports")
+Rel(tasksComp, goalsStore, "Uses", "Observer, MobX actions")
+Rel(tasksComp, errorHandler, "Uses")
+
+Rel(goalsStore, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(goalsStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(authStore, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(authStore, db, "Uses")
+Rel(authStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(errorHandler, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(errorComp, uiStore, "Uses", "Observer")
+
+@enduml

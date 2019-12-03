@@ -1,0 +1,162 @@
+@startuml "EzePro_Frontend"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+' LAYOUT_TOP_DOWN
+' LAYOUT_AS_SKETCH
+' LAYOUT_WITH_LEGEND
+
+Person(user, "User", "A sales or marketing professional")
+
+System_Boundary(c1, "Eze Pro Frontend (real-time)") {
+
+    Container(landing, "Landing page", "Page: NextJS", "Allows users to access other pages")
+
+    Container(tandc, "T&C page", "Page: NextJS", "Displays Terms and Conditions of use")
+
+    Container(legal, "Legal page", "Page: NextJS", "Displays legal information")
+
+    Container(about, "About page", "Page: NextJS", "Displays information about company and Eze Pro")
+
+    Container(contact, "Contact page", "Page: NextJS", "Contact form")
+
+    Container(faq, "FAQ page", "Page: NextJS", "Displays frequently asked questions")
+
+    Container(grading, "Grading page", "Page: NextJS", "Displays information about how devices are graded")
+
+    Container(help, "Help page", "Page: NextJS", "Displays form for creating tickets")
+
+    Container(social, "Social links", "Page: NextJS", "Displays external social account links")
+
+    Container(signup, "Sign Up", "Page: NextJS", "Provides signup interface")
+
+    Container(signupComp, "Sign Up Component", "Component: React-MobX", "Provides signup functionality")
+
+    Container(login, "Login", "Page: NextJS", "Provides login interface")
+
+    Container(loginComp, "Login Component", "Component: React-MobX", "Provides login functionality")
+
+    Container(forgottenPassword, "Forgotten Password page", "Page: NextJS", "Displays interface for password retrieval")
+
+    Container(forgottenPasswordComp, "Forgotten Password Component", "Component: React-MobX", "Provides functionality for password retrieval")
+
+    Container(dashboard, "Dashboard", "Page: NextJS", "Displays buying, selling, market observation, profile, orders and user wallet")
+
+    Container(marketComp, "Market Component", "Component: React-MobX", "Provides functionality for market analysis in real-time")
+
+    Container(profile, "Profile page", "Page: NextJS", "Displays interface for profile related actions")
+
+    Container(profileComp, "Profile Component", "Component: React-MobX", "Provides functionality for profile related actions")
+
+    Container(orders, "Orders page", "Page: NextJS", "Displays interface for order related activities")
+
+    Container(ordersComp, "Orders Component", "Component: React-MobX", "Provides functionality for order (buying and selling) related activities")
+
+    Container(wallet, "Wallet page", "Page: NextJS", "Displays interface for wallet related transactions")
+
+    Container(walletComp, "Wallet Component", "Component: React-MobX", "Provides functionality for wallet related transactions")
+
+    Container(appStore, "App Store", "Store: MobX", "MobX state store; stores general application wide data, makes communication with API")
+
+    Container(authStore, "Auth Store", "Store: MobX", "MobX state store; stores and processes auth - signup, login, user - data, makes communication with API")
+
+    Container(marketStore, "Market Store", "Store: MobX", "MobX state store; stores and processes market data in real-time, makes communication with API")
+
+    Container(orderStore, "Order Store", "Store: MobX", "MobX state store; stores and processes order and cart data, makes communication with API")
+
+    Container(productStore, "Product Store", "Store: MobX", "MobX state store; stores and processes product related data, makes communication with API")
+
+    Container(shippingStore, "Shipping Store", "Store: MobX", "MobX state store; stores and processes shipping data, makes communication with API")
+
+    Container(uiStore, "UI Store", "Store: MobX", "MobX state store; stores application-wide UI state")
+
+    ContainerDb(db, "Web storage", "LocalStorage", "Stores user JSON Web Token (JWT)")
+
+    Container(errorHandler, "Global Error Handler", "Component: React-MobX", "Handles application wide errors")
+
+    Container(errorComp, "Error Modal Component", "Component: React-MobX", "Shows error to user")
+
+}
+
+System_Ext(api, "RESTful API")
+System_Ext(monitoring, "Sentry")
+
+Rel(user, landing, "Uses", "HTTP")
+
+Rel_R(landing, signup, "Routes to")
+Rel_R(landing, forgottenPassword, "Routes to")
+Rel(landing, tandc, "Routes to")
+Rel(landing, legal, "Routes to")
+Rel(landing, about, "Routes to")
+Rel(landing, contact, "Routes to")
+Rel(landing, faq, "Routes to")
+Rel(landing, grading, "Routes to")
+Rel(landing, help, "Routes to")
+Rel(landing, social, "Routes to")
+
+Rel_R(forgottenPassword, login, "Routes to")
+Rel(forgottenPassword, forgottenPasswordComp, "Uses", "Imports")
+Rel(forgottenPasswordComp, authStore, "Uses", "Observer, MobX actions")
+
+Rel_R(signup, login, "Routes to")
+Rel(signup, signupComp, "Uses", "Imports")
+Rel(signupComp, authStore, "Uses", "Observer, MobX actions")
+
+Rel_R(login, dashboard, "Routes to")
+Rel(login, loginComp, "Uses", "Imports")
+Rel(loginComp, authStore, "Uses", "Observer, MobX actions")
+
+Rel(dashboard, profile, "Routes to")
+Rel(dashboard, orders, "Routes to")
+Rel(dashboard, wallet, "Routes to")
+Rel(dashboard, marketComp, "Uses", "Imports")
+Rel(marketComp, marketStore, "Uses", "Observer, MobX actions")
+Rel(marketComp, productStore, "Uses", "Observer, MobX actions")
+Rel(marketComp, orderStore, "Uses", "Observer, MobX actions")
+
+Rel(profile, help, "Routes to")
+Rel(profile, profileComp, "Uses", "Imports")
+Rel(profileComp, authStore, "Uses", "Observer, MobX actions")
+Rel(profileComp, shippingStore, "Uses", "Observer, MobX actions")
+
+Rel(orders, ordersComp, "Uses", "Imports")
+Rel(ordersComp, orderStore, "Uses", "Observer, MobX actions")
+Rel(ordersComp, productStore, "Uses", "Observer, MobX actions")
+
+Rel(wallet, walletComp, "Uses", "Imports")
+Rel(walletComp, authStore, "Uses", "Observer, MobX actions")
+
+Rel(appStore, errorHandler, "Uses")
+Rel(appStore, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(appStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(authStore, errorHandler, "Uses")
+Rel(authStore, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(authStore, db, "Uses")
+Rel(authStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(marketStore, errorHandler, "Uses")
+Rel(marketStore, api, "Makes API calls to", "Async, JSON/HTTP, WebSockets")
+Rel(marketStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(orderStore, errorHandler, "Uses")
+Rel(orderStore, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(orderStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(productStore, errorHandler, "Uses")
+Rel(productStore, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(productStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(shippingStore, errorHandler, "Uses")
+Rel(shippingStore, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(shippingStore, monitoring, "Makes API calls to", "Async, JSON/HTTP")
+
+Rel(errorHandler, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(errorComp, uiStore, "Uses", "Observer")
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml "reachHigh"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+' LAYOUT_TOP_DOWN
+' LAYOUT_AS_SKETCH
+' LAYOUT_WITH_LEGEND
+
+Person(user, "User", "A sales or marketing professional")
+
+System_Boundary(c1, "ReachHigh Personalised Career Plan Platform") {
+
+    Container(app, "Web Application", "Javascript, NextJS", "Delivers server-rendered SPA and static content")
+
+    Container(spa, "Single-Page App", "Javascript, ReactJS, MobX", "Provides all the platform's functionality to users via their browser")
+
+    Container(api, "RESTful API", "Javascript, FeathersJS", "Provides platform functionalities via API")
+
+    ContainerDb(db, "Database", "MongoDB", "Stores user credentials, goals and task information.")
+
+    Container(monitoring, "Sentry", "Javascript", "Monitoring/Reporting Service")
+
+}
+
+Rel(user, app, "Uses", "HTTP")
+Rel(user, spa, "Uses", "HTTP")
+
+Rel_R(app, spa, "Deliveres", "HTTP")
+
+Rel_R(spa, api, "Makes API calls to", "Async, JSON/HTTP")
+Rel(spa, monitoring, "Uses", "Async, HTTP")
+
+Rel(api, db, "Reads from and writes to", "Mongoose")
+Rel(api, monitoring, "Uses", "Async, JSON/HTTP")
+
+@enduml
