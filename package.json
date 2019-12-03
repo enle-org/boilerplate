@@ -1,0 +1,10 @@
+{
+  "name": "boilerplate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Ekpo David <dave170e71@gmail.com>",
+  "license": "MIT",
+  "workspaces": [
+    "be-feathers-mongodb"
+  ]
+}
