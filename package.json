@@ -7,6 +7,7 @@
   "license": "MIT",
   "workspaces": [
     "be-feathers-mongodb",
-    "fe-nextjs-mobx"
+    "fe-nextjs-mobx",
+    "mobile-reactNative-mobx"
   ]
 }
