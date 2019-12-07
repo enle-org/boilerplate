@@ -1,0 +1,48 @@
+.main-container {
+  padding: 0%;
+
+  .jumbotron{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    margin-bottom: 2rem;
+    min-height: -webkit-fill-available;
+
+    .headliner {
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .subtext {
+      font-size: .875rem;
+      margin-top: 2rem;
+      width: 50%;
+    }
+  }
+}
+
+@media screen and (max-width: 740px) {
+  .main-container {
+    padding: 0;
+
+    .jumbotron{
+      justify-content: start;
+      margin-top: 35%;
+      padding: 2rem 2rem 0;
+
+      .headliner {
+        font-size: 1.7rem;
+      }
+      
+      .subtext {
+        margin-top: 1rem;
+        text-align: justify;
+        width: 100%;
+      }
+    }
+  }
+}
+
