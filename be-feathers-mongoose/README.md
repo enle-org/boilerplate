@@ -1,4 +1,4 @@
-# be-feathers-mongodb
+# be-feathers-mongoose
 
 > 
 
@@ -14,7 +14,7 @@ Getting up and running is as easy as 1, 2, 3.
 2. Install your dependencies
 
     ```
-    cd path/to/be-feathers-mongodb
+    cd path/to/be-feathers-mongoose
     npm install
     ```
 

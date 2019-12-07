@@ -9,7 +9,7 @@
   "authentication": {
     "entity": "user",
     "service": "users",
-    "secret": "qoD1Fz1zzCUq/XJaLseGGQlx5oA=",
+    "secret": "WQvCDazV/Mpw+j2e6lrS5YIZFoE=",
     "authStrategies": [
       "jwt",
       "local"
@@ -48,5 +48,5 @@
       }
     }
   },
-  "mongodb": "mongodb://localhost:27017/be_feathers_mongodb"
+  "mongodb": "mongodb://localhost:27017/be_feathers_mongoose"
 }
