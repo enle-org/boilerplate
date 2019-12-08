@@ -21,9 +21,6 @@
       "json",
       "html"
     ],
-    "testMatch": [
-      "**/tests/**/*.js"
-    ],
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },
@@ -62,7 +59,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "enzyme-react-16-adapter-setup": "^0.1.0",
-    "enzyme-to-json": "^3.3.5",
+    "enzyme-to-json": "^3.4.3",
     "esdoc": "^1.1.0",
     "esdoc-custom-theme": "^1.4.2",
     "esdoc-ecmascript-proposal-plugin": "^1.0.0",
