@@ -21,9 +21,6 @@
       "json",
       "html"
     ],
-    "testMatch": [
-      "**/tests/**/*.js"
-    ],
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },
@@ -36,6 +33,11 @@
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less|scss)$": "identity-obj-proxy"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn lint && yarn test"
     }
   },
   "dependencies": {
@@ -62,7 +64,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "enzyme-react-16-adapter-setup": "^0.1.0",
-    "enzyme-to-json": "^3.3.5",
+    "enzyme-to-json": "^3.4.3",
     "esdoc": "^1.1.0",
     "esdoc-custom-theme": "^1.4.2",
     "esdoc-ecmascript-proposal-plugin": "^1.0.0",
@@ -74,6 +76,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
     "eslint-watch": "^5.0.1",
+    "husky": "^3.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.7.1",
     "npm-run-all": "^4.1.5",
