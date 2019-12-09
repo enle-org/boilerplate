@@ -1,5 +1,6 @@
 const axios = require('axios');
 const url = require('url');
+const mongoose = require('mongoose');
 const app = require('../src/app');
 
 const port = app.get('port') || 8998;
@@ -20,6 +21,7 @@ describe('Feathers application tests (with jest)', () => {
 
   afterAll(done => {
     server.close(done);
+    mongoose.disconnect();
   });
 
   it('starts and shows the index page', async () => {
