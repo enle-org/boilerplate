@@ -1,0 +1,39 @@
+@startuml "TSNow_BE_Comp_auth"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+Container(mobile, "Time Study Mobile App", "A physician in an organization")
+
+System_Boundary(c1, "Time Study Now API") {
+
+    Container(authRouter, "Auth Router", "Router: ExpressJS Router", "Routes to auth and password recovery related endpoints")
+    Container(loginRoute, "Login Route", "Router: ExpressJS Router", "Login endpoint")
+    Container(signupRoute, "Sign up Route", "Router: ExpressJS Router", "Sigin up endpoint")
+    Container(recoveryRoute, "Recovery Router", "Router: ExpressJS Router", "Account Recovery endpoint")
+
+    Container(authController, "Auth Controller", "Javascript, ExpressJS", "Provides functionality for sign up, login, and password recovery")
+    Container(userModel, "User Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to users from the underlying MongoDB database")
+}
+
+System_Ext(DB, "MongoDB Atlas", "Fully-managed cloud database.")
+System_Ext(Sendgrid, "Sendgrid", "Email service")
+System_Ext(TSEntreprise, "Timestudy Entreprise API")
+
+Rel(mobile, authRouter, "Routes to")
+
+Rel(authRouter, loginRoute, "Routes to")
+Rel(authRouter, signupRoute, "Routes to")
+Rel(authRouter, recoveryRoute, "Routes to")
+
+Rel(loginRoute, authController, "Uses")
+Rel(signupRoute, authController, "Uses")
+Rel(recoveryRoute, authController, "Uses")
+Rel(authController, userModel, "Uses/imports")
+
+Rel(c1, DB, "Uses", "HTTPS")
+Rel(c1, Sendgrid, "Uses", "HTTPS")
+Rel(c1, TSEntreprise, "Uses", "HTTPS")
+
+@enduml

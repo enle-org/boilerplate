@@ -1,0 +1,41 @@
+@startuml "TSNow_Comp_architecture_settings"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+
+Container(home, "Home Screen", "Screen: React Native", "Provides an interface for starting, stoping, selecting, and saving an activity along with notes")
+
+System_Boundary(c1, "Settings") {
+    Container(home, "Home Screen", "Screen: React Native", "Provides an interface for starting, stoping, selecting, and saving an activity along with notes")
+
+    Container(settings, "Settings Screen", "Screen: React Native", "Provides an interface for viewing and updating the user's profile and other related actions")
+
+    Container(errorsComp, "Errors Component", "Component: React Native", "Component for managing and displaying errors")
+
+    Container(appStore, "App Store", "Store: MobX", "MobX state store; stores application wide settings and config")
+
+    Container(authStore, "Auth Store", "Store: MobX", "MobX state store; stores signup and login input data, handles auth, tokens and  makes communication with API")
+
+    Container(activityStore, "Activity Store", "Store: MobX", "MobX state store; stores and handles all activity based information")
+
+    Container(uiStore, "UI Store", "Store: MobX", "MobX state store; stores application-wide UI state")
+}
+
+System_Ext(TS, "Time Study API", "Restful API providing platform's functionality")
+
+Rel(home, settings, "Routes to")
+
+Rel(settings, appStore, "Uses", "Observer, MobX actions")
+Rel(settings, authStore, "Uses", "Observer, MobX actions")
+Rel(settings, activityStore, "Uses", "Observer, MobX actions")
+Rel(settings, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(errorsComp, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(appStore, TS, "Makes API calls to", "Async, JSON/HTTPS")
+Rel(authStore, TS, "Makes API calls to", "Async, JSON/HTTPS")
+Rel(activityStore, TS, "Makes API calls to", "Async, JSON/HTTPS")
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml "TSNow_BE_Comp_settings"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+Container(mobile, "Time Study Mobile App", "A physician in an organization")
+
+System_Boundary(c1, "Time Study Now API") {
+    Container(userRouter, "User Router", "Router: ExpressJS Router", "Routes to users and individual endpoints")
+    Container(userRoutes, "User Route", "Router: ExpressJS Router", "User endpoints")
+    Container(userModel, "User Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to users from the underlying MongoDB database")
+    Container(userController, "User Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding users.")
+
+    Container(activityRouter, "Activity Router", "Router: ExpressJS Router", "Activity router")
+    Container(activityRoutes, "Activity Routes", "Router: ExpressJS Router", "Activity endpoints")
+    Container(activityModel, "Activity Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to activities from the underlying MongoDB database")
+    Container(activityController, "Activity Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding activities.")
+    
+    Container(organisationRouter, "Organisation Router", "Router: ExpressJS Router", "Organisation router")
+    Container(organisationRoutes, "Organisation Routes", "Router: ExpressJS Router", "Organisation endpoints")
+    Container(organisationModel, "Organisation Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to organisations from the underlying MongoDB database")
+    Container(organisationController, "Organisation Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding organisations.")
+}
+
+System_Ext(DB, "MongoDB Atlas", "Fully-managed cloud database.")
+System_Ext(Sendgrid, "Sendgrid", "Email service")
+
+Rel(mobile, userRouter, "Uses")
+Rel(mobile, activityRouter, "Uses")
+Rel(mobile, organisationRouter, "Uses")
+
+Rel(userRouter, userRoutes, "Routes to")
+Rel(userRoutes, userController, "Uses")
+Rel(userController, userModel, "Uses/imports")
+
+Rel(activityRouter, activityRoutes, "Routes to")
+Rel(activityRoutes, activityController, "Uses")
+Rel(activityController, activityModel, "Uses/imports")
+
+Rel(organisationRouter, organisationRoutes, "Routes to")
+Rel(organisationRoutes, organisationController, "Uses")
+Rel(organisationController, organisationModel, "Uses/imports")
+
+Rel(c1, DB, "Uses", "HTTPS")
+Rel(c1, Sendgrid, "Uses", "HTTPS")
+
+@enduml

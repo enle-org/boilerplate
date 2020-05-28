@@ -1,0 +1,29 @@
+@startuml "TSNow_BE_Comp_architecture"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+
+Container(mobile, "Time Study Mobile App", "A physician in an organization")
+
+System_Boundary(c1, "Time Study Now API") {
+    Container(activityRouter, "Activity Router", "Router: ExpressJS Router", "Activity router")
+    Container(activityRoutes, "Activity Routes", "Router: ExpressJS Router", "Activity endpoints")
+    Container(activityModel, "Activity Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to activities from the underlying MongoDB database")
+    Container(activityController, "Activity Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding activities.")
+}
+
+System_Ext(DB, "MongoDB Atlas", "Fully-managed cloud database.")
+System_Ext(Cloudinary, "Cloudinary CDN", "Content Delivery Network")
+
+Rel(mobile, activityRouter, "Uses")
+
+Rel(activityRouter, activityRoutes, "Routes to")
+Rel(activityRoutes, activityController, "Uses")
+Rel(activityController, activityModel, "Uses/imports")
+
+Rel(c1, DB, "Uses", "HTTPS")
+Rel(c1, Cloudinary, "Uses", "HTTPS")
+
+@enduml

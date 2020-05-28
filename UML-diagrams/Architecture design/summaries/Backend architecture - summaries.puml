@@ -1,0 +1,28 @@
+@startuml "TSNow_BE_Comp_Summaries"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+Container(mobile, "Time Study Mobile App", "A physician in an organization")
+
+System_Boundary(c1, "Time Study Now API") {
+    Container(summaryRouter, "Summary Router", "Router: ExpressJS Router", "Summary router")
+    Container(summaryRoutes, "Summary Routes", "Router: ExpressJS Router", "Summary endpoints")
+    Container(activityModel, "Activity Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to activities from the underlying MongoDB database")
+    Container(summaryController, "Summary Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding summaries.")
+}
+
+System_Ext(DB, "MongoDB Atlas", "Fully-managed cloud database.")
+System_Ext(Sendgrid, "Sendgrid", "Email service")
+
+Rel(mobile, summaryRouter, "Uses")
+
+Rel(summaryRouter, summaryRoutes, "Routes to")
+Rel(summaryRoutes, summaryController, "Uses")
+Rel(summaryController, activityModel, "Uses/imports")
+
+Rel(c1, DB, "Uses", "HTTPS")
+Rel(c1, Sendgrid, "Uses", "HTTPS")
+
+@enduml

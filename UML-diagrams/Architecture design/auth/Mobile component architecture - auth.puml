@@ -1,0 +1,49 @@
+@startuml "TSNow_Comp_architecture_auth"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+
+Person(user, "User", "A physician in an organization")
+
+System_Boundary(c1, "Settings") {
+
+    Container(onboarding, "Onboarding Screen", "Screen: React Native", "Onboarding/tutorial screens")
+
+    Container(signup, "Sign Up Screen", "Screen: React Native", "Provides signup and organisation linking screens")
+
+    Container(login, "Login Screen", "Screen: React Native", "Provides login interface")
+
+    Container(errorsComp, "Errors Component", "Component: React Native", "Component for managing and displaying errors")
+
+    Container(appStore, "App Store", "Store: MobX", "MobX state store; stores application wide settings and config")
+
+    Container(authStore, "Auth Store", "Store: MobX", "MobX state store; stores signup and login input data, handles auth, tokens and  makes communication with API")
+
+    Container(uiStore, "UI Store", "Store: MobX", "MobX state store; stores application-wide UI state")
+}
+
+System_Ext(TS, "Time Study API", "Restful API providing platform's functionality")
+System_Ext(SentryMobile, "Sentry", "Error monitoring/reporting service")
+
+Rel(user, onboarding, "Uses")
+
+Rel_R(onboarding, signup, "Routes to")
+Rel(onboarding, appStore, "Uses", "Observer, MobX actions")
+
+Rel_R(signup, login, "Routes to")
+
+Rel(login, authStore, "Uses", "Observer, MobX actions")
+Rel(signup, authStore, "Uses", "Observer, MobX actions")
+
+Rel(authStore, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(errorsComp, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(appStore, TS, "Makes API calls to", "Async, JSON/HTTPS")
+Rel(authStore, TS, "Makes API calls to", "Async, JSON/HTTPS")
+
+Rel(c1, SentryMobile, "Makes API calls to", "Async, JSON/HTTPS")
+
+@enduml
