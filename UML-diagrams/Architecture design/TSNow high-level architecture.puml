@@ -1,0 +1,150 @@
+@startuml "TSNow_HL_architecture"
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+
+Person(user, "User", "A physician in an organization")
+
+System_Boundary(c1, "Time Study Now Mobile App") {
+
+    Container(onboarding, "Onboarding Screen", "Screen: React Native", "Onboarding/tutorial screens")
+
+    Container(signup, "Sign Up Screen", "Screen: React Native", "Provides signup interface")
+
+    Container(login, "Login Screen", "Screen: React Native", "Provides login interface")
+
+    Container(home, "Home Screen", "Screen: React Native", "Provides an interface for starting, stoping, selecting, and saving an activity along with notes")
+
+    Container(activities, "Activities Screen", "Screen: React Native", "Provides an interface for managing(CRUD) activities")
+
+    Container(summary, "Summary Screen", "Screen: React Native", "Provides an interface for viewing activity summaries over a period")
+
+    Container(errorsComp, "Errors Component", "Component: React Native", "Component for managing and displaying errors")
+
+    Container(appStore, "App Store", "Store: MobX", "MobX state store; stores application wide settings and config")
+
+    Container(authStore, "Auth Store", "Store: MobX", "MobX state store; stores signup and login input data, handles auth, tokens and  makes communication with API")
+
+    Container(activityStore, "Activity Store", "Store: MobX", "MobX state store; stores and handles all activity based information")
+
+    Container(uiStore, "UI Store", "Store: MobX", "MobX state store; stores application-wide UI state")
+}
+
+System_Ext(GLocation, "Google Location API", "Facilitate adding location data to Time Study Now")
+
+System_Ext(CloudinaryMobile, "Cloudinary CDN", "Content Delivery Network")
+
+System_Ext(SentryMobile, "Sentry", "Error monitoring/reporting service")
+Rel(c1, SentryMobile, "Makes API calls to", "Async, JSON/HTTPS")
+
+Rel(user, onboarding, "Uses")
+Rel_R(onboarding, signup, "Routes to")
+Rel_R(signup, login, "Routes to")
+Rel_R(login, home, "Routes to")
+Rel(home, activities, "Routes to")
+Rel(home, summary, "Routes to")
+
+Rel(onboarding, appStore, "Uses", "Observer, MobX actions")
+
+Rel(login, authStore, "Uses", "Observer, MobX actions")
+Rel(signup, authStore, "Uses", "Observer, MobX actions")
+
+Rel(home, activityStore, "Uses", "Observer, MobX actions")
+
+Rel(activities, activityStore, "Uses", "Observer, MobX actions")
+Rel(activities, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(summary, activityStore, "Uses", "Observer, MobX actions")
+Rel(summary, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(appStore, uiStore, "Uses")
+Rel(authStore, uiStore, "Uses")
+
+Rel(errorsComp, uiStore, "Uses", "Observer, MobX actions")
+
+Rel(activityStore, CloudinaryMobile, "Makes API calls to", "Async, JSON/HTTPS")
+Rel(activityStore, GLocation, "Makes API calls to", "Async, JSON/HTTPS")
+
+System_Boundary(c2, "Time Study Now API") {
+    Container(app, "ExpressJS App Entry", "Config: ExpressJS Entry", "Entry point and config for the API")
+
+    Container(router, "API Router", "Config: ExpressJS Router", "Router config for endpoints")
+
+    Container(authRouter, "Auth Router", "Router: ExpressJS Router", "Routes to auth and password recovery related endpoints")
+    Container(loginRoute, "Login Route", "Router: ExpressJS Router", "Login endpoint")
+    Container(signupRoute, "Sign up Route", "Router: ExpressJS Router", "Sigin up endpoint")
+    Container(recoveryRoute, "Sign up Router", "Router: ExpressJS Router", "Recovery endpoint")
+
+    Container(authController, "Auth Controller", "Javascript, ExpressJS", "Provides functionality for sign up, login, and password recovery")
+
+    Container(userRouter, "User Router", "Router: ExpressJS Router", "Routes to users and individual endpoints")
+    Container(usersRoute, "Users Route", "Router: ExpressJS Router", "Users endpoints")
+    Container(userRoute, "User Route", "Router: ExpressJS Router", "User endpoints")
+    Container(userModel, "User Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to users from the underlying MongoDB database")
+    Container(userController, "User Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding users.")
+
+    Container(activityRouter, "Activity Router", "Router: ExpressJS Router", "Activity router")
+    Container(activityRoutes, "Activity Routes", "Router: ExpressJS Router", "Activity endpoints")
+    Container(activityModel, "Activity Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to activities from the underlying MongoDB database")
+    Container(activityController, "Activity Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding activities.")
+    
+    Container(organisationRouter, "Organisation Router", "Router: ExpressJS Router", "Organisation router")
+    Container(organisationRoutes, "Organisation Routes", "Router: ExpressJS Router", "Organisation endpoints")
+    Container(organisationModel, "Organisation Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to organisations from the underlying MongoDB database")
+    Container(organisationController, "Organisation Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding organisations.")
+
+    Container(summaryRouter, "API Router", "Router: ExpressJS Router", "Summary router")
+    Container(summaryRoutes, "Summary Routes", "Router: ExpressJS Router", "Summary endpoints")
+    Container(summaryModel, "Summary Model", "Schema: Mongoose Model", "Provides functionality for creating and reading documents related to summaries from the underlying MongoDB database")
+    Container(summaryController, "Summary Controller", "Javascript, ExpressJS", "Provides functionality for CRUD operations regarding summaries.")
+}
+
+System_Ext(DB, "MongoDB Atlas", "Fully-managed cloud database.")
+System_Ext(Sentry, "Sentry", "Error monitoring/reporting service")
+System_Ext(Cloudinary, "Cloudinary CDN", "Content Delivery Network")
+System_Ext(Sendgrid, "Sendgrid", "Email service")
+
+Rel_R(c1, c2, "Communicates with", "Async, JSON/HTTPS")
+
+Rel(app, router, "Uses")
+Rel(router, authRouter, "Uses/imports")
+Rel(router, userRouter, "Uses/imports")
+Rel(router, activityRouter, "Uses/imports")
+Rel(router, organisationRouter, "Uses/imports")
+Rel(router, summaryRouter, "Uses/imports")
+
+Rel(authRouter, loginRoute, "Routes to")
+Rel(authRouter, signupRoute, "Routes to")
+Rel(authRouter, recoveryRoute, "Routes to")
+
+Rel(loginRoute, authController, "Uses")
+Rel(signupRoute, authController, "Uses")
+Rel(recoveryRoute, authController, "Uses")
+Rel(authController, userModel, "Uses/imports")
+
+Rel(userRouter, usersRoute, "Routes to")
+Rel(userRouter, userRoute, "Routes to")
+Rel(usersRoute, userController, "Uses")
+Rel(userRoute, userController, "Uses")
+Rel(userController, userModel, "Uses/imports")
+
+Rel(activityRouter, activityRoutes, "Routes to")
+Rel(activityRoutes, activityController, "Uses")
+Rel(activityController, activityModel, "Uses/imports")
+
+Rel(organisationRouter, organisationRoutes, "Routes to")
+Rel(organisationRoutes, organisationController, "Uses")
+Rel(organisationController, organisationModel, "Uses/imports")
+
+Rel(summaryRouter, summaryRoutes, "Routes to")
+Rel(summaryRoutes, summaryController, "Uses")
+Rel(summaryController, summaryModel, "Uses/imports")
+
+Rel(c2, DB, "Uses", "HTTPS")
+Rel(c2, Sentry, "Uses", "HTTPS")
+Rel(c2, Cloudinary, "Uses", "HTTPS")
+Rel(c2, Sendgrid, "Uses", "HTTPS")
+
+@enduml
