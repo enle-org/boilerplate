@@ -22,9 +22,9 @@
       "html"
     ],
     "preset": "jest-expo",
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    }
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ]
   },
   "dependencies": {
     "@expo/samples": "~3.0.3",
@@ -48,7 +48,10 @@
   "devDependencies": {
     "babel-eslint": "^10.0.3",
     "babel-preset-expo": "^7.0.0",
-    "jest-expo": "^35.0.0",
+    "detox": "^17.3.4",
+    "jest": "~25.2.6",
+    "jest-circus": "^26.4.0",
+    "jest-expo": "^38.0.2",
     "esdoc": "^1.1.0",
     "esdoc-custom-theme": "^1.4.2",
     "esdoc-publish-html-plugin": "^1.1.2",
@@ -59,7 +62,8 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-watch": "^6.0.1",
     "npm-run-all": "^4.1.5",
-    "npm-watch": "^0.6.0"
+    "npm-watch": "^0.6.0",
+    "react-test-renderer": "^16.13.1"
   },
   "private": true
 }

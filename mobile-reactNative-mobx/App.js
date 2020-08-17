@@ -20,6 +20,17 @@ export default function App(props) {
           onError={handleLoadingError}
           onFinish={() => handleFinishLoading(setLoadingComplete)}
         />
+        <View testID='welcome'>
+          <Text>Open up App.js to start working on your app!</Text>
+          <View>
+            <TouchableOpacity
+              style={{marginTop: 20, padding: 10, backgroundColor: 'beige'}}
+              testID='MyUniqueId123'
+            >
+              <Text>Some button</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </Provider>
     );
   } else {
@@ -27,6 +38,17 @@ export default function App(props) {
       <Provider {...Stores}>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <View testID='welcome'>
+            <Text>Open up App.js to start working on your app!</Text>
+            <View>
+              <TouchableOpacity
+                style={{marginTop: 20, padding: 10, backgroundColor: 'beige'}}
+                testID='MyUniqueId123'
+              >
+                <Text>Some button</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
           <AppNavigator />
         </View>
       </Provider>
